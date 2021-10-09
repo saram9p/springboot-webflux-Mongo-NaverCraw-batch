@@ -2,6 +2,7 @@ package com.cos.navernews.domain;
 
 import java.sql.Timestamp;
 
+import org.junit.platform.commons.annotation.Testable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +15,7 @@ import lombok.Getter;
 @Getter
 @Document(collection = "test1")
 //@Document(collection = "naver_realtime")
-public class NaverNews {
+public class TestNaverNews {
 	@Id
 	private String _id;
 	
