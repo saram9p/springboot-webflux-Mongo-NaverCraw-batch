@@ -22,6 +22,7 @@ import reactor.core.scheduler.Schedulers;
 @RequiredArgsConstructor
 @RestController
 public class NaverNewsController {
+	//db.runCommand( { convertToCapped: 'test1', size: 8192 } )
 
 	private final NaverNewsRepository naverNewsRepository;
 	

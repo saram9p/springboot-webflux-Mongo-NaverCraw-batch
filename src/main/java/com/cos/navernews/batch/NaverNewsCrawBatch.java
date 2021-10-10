@@ -1,12 +1,8 @@
 package com.cos.navernews.batch;
 
-import java.time.Duration;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -18,8 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.cos.navernews.domain.NaverNews;
 import com.cos.navernews.domain.NaverNewsRepository;
+import com.cos.navernews.util.시간반환;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 
@@ -29,9 +25,10 @@ public class NaverNewsCrawBatch {
 
 	private int aid = 277493;
 	private final NaverNewsRepository naverNewsRepository;
+	private final 시간반환 타임스탬프반환;
 	
 	//@Scheduled(cron = "* * * * * *", zone = "Asia/Seoul")
-	@Scheduled(fixedDelay = 1000*10*1) //1000*60*1
+	@Scheduled(fixedDelay = 1000*30*1) //1000*60*1
 	public void NaverNewsCraw() {
 		
 		List<NaverNews> naverNewsList = new ArrayList<>();
@@ -53,23 +50,31 @@ public class NaverNewsCrawBatch {
 				String title = titleElement.text();
 				
 				String createdAtNatural = createdAtElement.text();
-				String result = createdAtNatural.replaceAll("..(?:(오전|오후) ?.[0-9]:?.[0-9])", "");
-				DateFormat df = new SimpleDateFormat("yyyy.MM.dd");
-				Date d = df.parse(result);
-				long time = d.getTime();
-				Timestamp ts = new Timestamp(time);
+
+				Timestamp createdAt;
+				try {
+					createdAt = 시간반환.타임스탬프반환(createdAtNatural);
+					
+					LocalDateTime lt = LocalDateTime.now().minusDays(1).plusHours(9);
+					Timestamp ts = Timestamp.valueOf(lt);
+					
+					if(createdAt.before(ts)) {
+						
+						NaverNews naverNews = NaverNews.builder()
+								.createdAt(createdAt)
+								.company(company)
+								.title(title)
+								.build();
+						
+						naverNewsList.add(naverNews);
+					} else {
+						System.out.println("오늘 날짜의 이전 날짜만 저장할 수 있습니다.");
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				
-				LocalDateTime date = ts.toLocalDateTime().plusHours(9);
-				
-				Timestamp createdAt = Timestamp.valueOf(date);
-				
-				NaverNews naverNews = NaverNews.builder()
-						.createdAt(createdAt)
-						.company(company)
-						.title(title)
-						.build();
-				
-				naverNewsList.add(naverNews);
 			} catch (Exception e) {
 				System.out.println("통신 오류!!");
 			}
