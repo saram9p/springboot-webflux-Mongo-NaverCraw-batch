@@ -1,4 +1,4 @@
-package com.cos.navernews.util;
+package com.cos.navernews.test;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;

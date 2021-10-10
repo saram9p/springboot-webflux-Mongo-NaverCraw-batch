@@ -11,5 +11,5 @@ public class NaverNewsProject2Application {
 	public static void main(String[] args) {
 		SpringApplication.run(NaverNewsProject2Application.class, args);
 	}
-
+ 
 }

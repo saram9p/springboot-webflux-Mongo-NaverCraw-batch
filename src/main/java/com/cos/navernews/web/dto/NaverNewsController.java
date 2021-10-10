@@ -38,11 +38,5 @@ public class NaverNewsController {
 	public Mono<NaverNews> save(@RequestBody NaverNews naverNews) {
 		return naverNewsRepository.save(naverNews);
 	}
-	
-	@DeleteMapping("/news/{id}")
-	public int deleteById(@PathVariable String id) {
-		naverNewsRepository.deleteById(id);
-		return 1;
 		
-	}
 }

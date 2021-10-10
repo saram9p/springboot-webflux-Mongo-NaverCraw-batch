@@ -279,3 +279,20 @@ public class 날짜타입변환 {
 //
 //LocalDateTime date = ts.toLocalDateTime(); //.plusHours(9);
 //Timestamp createdAt = Timestamp.valueOf(date);
+
+// 2021-10-11 임시로 여기에 붙여넣기함
+//try {
+//createdAt = 시간반환.타임스탬프반환(createdAtNatural);
+//
+//LocalDateTime lt = LocalDateTime.now().minusDays(1).plusHours(9);
+//Timestamp ts = Timestamp.valueOf(lt);
+//
+//if(createdAt.before(ts)) {
+//	
+//} else {
+//	System.out.println("오늘 날짜의 이전 날짜만 저장할 수 있습니다.");
+//}
+//
+//} catch (Exception e) {
+//e.printStackTrace();
+//}

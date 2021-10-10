@@ -1,11 +1,11 @@
 package com.cos.navernews.domain;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,5 +24,5 @@ public class NaverNews {
 	private String title;
 	//private String createdAt;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-	private Timestamp createdAt;
+	private Date createdAt;
 }
