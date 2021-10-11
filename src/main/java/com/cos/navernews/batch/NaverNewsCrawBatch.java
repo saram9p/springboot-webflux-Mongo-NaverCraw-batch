@@ -50,7 +50,7 @@ public class NaverNewsCrawBatch {
 		// 오늘 날짜의 이전 날짜를 설정
 		LocalDateTime ldt = LocalDateTime.now().minusDays(1);
 		
-		for (int i = 0; i < 2; i++) { /*날짜기준*/
+		for (int i = 0; i < 1; i++) { /*i 를 2이상으로 하면 순서가 뒤죽박죽되어서 1로 설정함*/
 			
 			String aidStr = String.format("%010d", aidSave);
 			String url = "https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=103&oid=437&aid=" + aidStr;

@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
 public interface NaverNewsRepository extends ReactiveMongoRepository<NaverNews, String> {
 
 	@Tailable
-	@Query("{}.sort({createdAt:1})")
+	@Query("{})")
 		Flux<NaverNews> mFindAll();		
 
 //	@Tailable
