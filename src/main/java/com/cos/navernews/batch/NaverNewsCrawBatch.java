@@ -3,6 +3,7 @@ package com.cos.navernews.batch;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,22 +29,30 @@ import reactor.core.publisher.Flux;
 public class NaverNewsCrawBatch {
 
 	private int aid = 277726; //277493
+	private int aidSave = aid;
 	private final NaverNewsRepository naverNewsRepository;
 	private final 기사날짜파싱 기사날짜파싱;
 	
-	//@Scheduled(fixedDelay = 1000*30*1) //1000*60*1
-	@Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron = "0/1 * 1 * * *", zone = "Asia/Seoul")
+	//@Scheduled(fixedDelay = 1000*2*1) //1000*60*1
 	public void NaverNewsCraw() {
 		System.out.println("통신중");
+
+		this.Craw();
+
+        //naverNewsRepository.saveAll(naverNewsList);
+	} // end of NaverNewsCraw()
+	
+	public void Craw() {
 		
 		List<NaverNews> naverNewsList = new ArrayList<>();
-		
+			
 		// 오늘 날짜의 이전 날짜를 설정
 		LocalDateTime ldt = LocalDateTime.now().minusDays(1);
 		
-		for (int i = 0; i < 10000; i++) { /*날짜기준*/
+		for (int i = 0; i < 2; i++) { /*날짜기준*/
 			
-			String aidStr = String.format("%010d", aid);
+			String aidStr = String.format("%010d", aidSave);
 			String url = "https://news.naver.com/main/read.naver?mode=LSD&mid=shm&sid1=103&oid=437&aid=" + aidStr;
 			RestTemplate rt = new RestTemplate();
 			
@@ -59,7 +68,7 @@ public class NaverNewsCrawBatch {
 				String title = titleElement.text();
 				
 				String createdAtNatural = createdAtElement.text();
-
+				
 				Date createdAt = 기사날짜파싱.파싱후Date반환(createdAtNatural);
 				
 				String stringStandardTime = "2021.10.07 00:00"; 
@@ -102,12 +111,16 @@ public class NaverNewsCrawBatch {
 			}
 			
 			aid++;
+			
+			aidSave = aid;
+			System.out.println("현재 저장된 aid는 " + aidSave + "입니다.");
+			
 		} // end of For
 		Flux.fromIterable(naverNewsList)
+		.delayElements(Duration.ofSeconds(2))
 		.flatMap(this.naverNewsRepository::save)
-		.doOnComplete(() -> System.out.println("Complete"))
+		.doOnComplete(() -> System.out.println("데이터 저장 완료"))
 		.subscribe();
-        //naverNewsRepository.saveAll(naverNewsList);
-	} // end of NaverNewsCraw()
+	}
 	
 }

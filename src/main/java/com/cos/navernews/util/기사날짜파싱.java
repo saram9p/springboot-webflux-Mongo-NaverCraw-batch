@@ -30,7 +30,7 @@ public class 기사날짜파싱 {
 				Date d = TypeConverter.StringToDate(createdAtParse);
 				
 				// 오전이라서 12시간을 감소 // Calendar 클래스를 쓰면 노란색 에러가 뜨지 않을수도
-				d.setHours(d.getHours() - 12);
+				//d.setHours(d.getHours() - 12);
 				return d;
 			} catch (Exception e) {
 				e.printStackTrace();
